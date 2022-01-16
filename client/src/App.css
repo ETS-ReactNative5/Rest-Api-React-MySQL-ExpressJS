@@ -1,0 +1,40 @@
+.App {
+ display:flex;
+ flex-direction: column;
+ justify-content: center;
+background: ('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdoGBpEDWew_7SUSaLiSp7xjitcx6MumqKXQ&usqp=CAU');
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color : orange;
+}
+
+.information input {
+  width:300px;
+  height: 30px;
+  font-size: 20px;
+  padding-left: 10px;
+  margin: 5px;
+}
+
+.information button {
+  width: 300px;
+  height: 30px;
+  margin-top: 15px;
+}
+
+.information button:hover {
+  cursor : pointer
+}
+
+img {
+position: absolute;
+top: 20px;
+left: -100px;
+opacity:0.6;
+}
