@@ -17,14 +17,14 @@ teams, players, team-players and results.
 - /components - Contains all the app's front end structure - create, read, update delete method for teams, players, results, validations, styling, main navigation which is presented in every page 
 
 ## Packages Used
--SERVER
+## SERVER
 -** Express** : Flexible and minimal web app for Node.js framework.  
 -** MySQL** : It's required as a support for Sequelize package for MySQL databases.  
 -** Sequelize** : Promise-base Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.  
 -** Sequelize.cli** : Sequelize Command-Line Interface(CLI) ships support for migrations and project bootstrapping.  
 -** Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env. 
 
--CLIENT
+## CLIENT
 -** React** : Front-end library for building user interfaces based on UI components.
 -** React-bootstrap ** : Component-based library that provides native Bootstrap components as pure React components
 -** Axios ** : Communicate with the backend and it also supports the Promise API that is native to JS ES6.  
