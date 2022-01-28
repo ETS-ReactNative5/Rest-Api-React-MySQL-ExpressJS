@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
-import axios from "axios";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Team = () => {
@@ -14,16 +13,21 @@ const Team = () => {
     }, []);
 
     const getTeamById = async () => {
-
-        await axios.get(`http://localhost:5000/teams/${id}`)
-            .then((response) => {
-                const homeRes = response.data.homeResults
-                sethomeResults(homeRes)
-                const awayRes = response.data.awayResults
-                setAwayResult(awayRes)
-                const teamPlayers = response.data.teamPlayers
-                setPlayers(teamPlayers)
-            })
+        try {
+            await fetch(`http://localhost:5000/teams/${id}`,)
+                .then((response) => {
+                    return response.json();
+                }).then(data => {
+                    const homeRes = data.homeResults
+                    sethomeResults(homeRes)
+                    const awayRes = data.awayResults
+                    setAwayResult(awayRes)
+                    const teamPlayers = data.teamPlayers
+                    setPlayers(teamPlayers)
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -108,7 +112,6 @@ const Team = () => {
             </table>
         </div>
     )
-
 }
 
 export default Team 

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
-import axios from "axios";
+import { useState, useEffect } from 'react';
 import { Link, } from "react-router-dom";
-
+import { Spinner } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Teams = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
@@ -12,17 +13,30 @@ const Teams = () => {
 
     const getTeams = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/teams')
-            setTeams(response.data)
+            await fetch('http://localhost:5000/teams/',)
+                .then((data) => {
+                    return data.json();
+                }).then(response => {
+                    setTeams(response)
+                    setIsLoading(false)
+                })
         } catch (error) {
             console.log(error)
         }
     }
 
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+
     const deleteTeam = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/teams/${id}`)
-            setTeams(teams.filter(team => team.id !== id))
+            await fetch(`http://localhost:5000/teams/${id}`, {
+                method: "DELETE",
+            }).then(response => {
+                setTeams(teams.filter(team => team.id !== id))
+                return response.json()
+            })
         } catch (error) {
             console.log(error)
         }
@@ -32,7 +46,7 @@ const Teams = () => {
         <div>
             <h2 className='centered'>Clubs</h2>
             <Link to="/Teams/add" className="link">Add New</Link>
-            <table className="table is-striped is-fullwidth">
+            <table>
                 <thead>
                     <tr >
                         <th>№</th>
@@ -48,8 +62,7 @@ const Teams = () => {
                             <td>
                                 <Link to={`/Teams/${team.id}`} className='link'>View</Link>
                                 <Link to={`/Teams/edit/${team.id}`} className='edit'>Edit</Link>
-                                <button onClick={() => deleteTeam(team.id)}
-                                    className="button is-small is-danger">Delete</button>
+                                <button onClick={() => deleteTeam(team.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

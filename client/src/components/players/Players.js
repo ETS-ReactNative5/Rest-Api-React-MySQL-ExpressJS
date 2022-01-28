@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { Link, } from "react-router-dom";
-import axios from 'axios'
-import './Players'
+import './Players.css';
+import { Spinner } from 'react-bootstrap';
 
 const Players = () => {
-
+  const [isLoading, setIsLoading] = useState(true);
   const [players, setPlayers] = useState([]);
+  const [paranoidTeams, setParanoidTeams] = useState([]);
+
 
   useEffect(() => {
     getPlayers();
@@ -13,8 +15,16 @@ const Players = () => {
 
   const getPlayers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/players')
-      setPlayers(response.data)
+      await fetch('http://localhost:5000/players/',)
+        .then((response) => {
+          return response.json();
+        }).then(data => {
+          const teamExists = data.filter(players => (players.teams.deletedAt === null))
+          setPlayers(teamExists)
+          const paranoid = data.filter(players => (players.teams.deletedAt !== null))
+          setParanoidTeams(paranoid)
+          setIsLoading(false)
+        })
     } catch (error) {
       console.log(error)
     }
@@ -22,11 +32,19 @@ const Players = () => {
 
   const deletePlayer = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/players/${id}`)
-      setPlayers(players.filter(player => player.id !== id))
+      await fetch(`http://localhost:5000/players/${id}`, { method: "DELETE" })
+        .then((data) => {
+          setPlayers(players.filter(player => player.id !== id))
+          setParanoidTeams(paranoidTeams.filter(player => player.id !== id))
+          return data.json();
+        })
     } catch (error) {
       console.log(error)
     }
+  }
+
+  if (isLoading) {
+    return (<Spinner animation="border" variant="primary" />)
   }
 
   return (
@@ -37,7 +55,7 @@ const Players = () => {
         <thead>
           <tr>
             <th>№</th>
-            <th>Team Id</th>
+            <th>Team Name</th>
             <th>Name</th>
             <th>Position</th>
             <th>Age</th>
@@ -48,14 +66,39 @@ const Players = () => {
           {players.map((player, index) => (
             <tr key={player.id}>
               <td>{index + 1}.</td>
-              <td>{player.teamId}</td>
+              <td>{player.teams.team_name}</td>
               <td>{player.name}</td>
               <td>{player.position}</td>
               <td>{player.age}</td>
               <td>
                 <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
-                <button onClick={() => deletePlayer(player.id)}
-                >Delete</button>
+                <button onClick={() => deletePlayer(player.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2 className='centered' style={{marginBottom:'50px'}}>Free Transfers</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Age</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {paranoidTeams.map((player, index) => (
+            <tr key={player.id}>
+              <td>{index + 1}.</td>
+              <td>{player.name}</td>
+              <td>{player.position}</td>
+              <td>{player.age}</td>
+              <td>
+                <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
+                <button onClick={() => deletePlayer(player.id)}>Delete</button>
               </td>
             </tr>
           ))}

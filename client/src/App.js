@@ -13,12 +13,15 @@ import TeamPlayers from './components/teamPlayers/MainGetTeamPlayers';
 import TeamPlayersById from './components/teamPlayers/GetTeamPlayersById';
 import HomePage from './components/homePage/homePage';
 import Layout from './components/homePage/layout/Layout'
+import Test from './Test'
+
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
           <Route path='/' element={< HomePage />} />
+          <Route path='/test' element={< Test />} />
 
           <Route path='/Teams' element={<Teams />} />
           <Route path='/Teams/:id' element={<Team />} />

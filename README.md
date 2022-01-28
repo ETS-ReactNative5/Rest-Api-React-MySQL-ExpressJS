@@ -27,11 +27,10 @@ teams, players, team-players and results.
 ## CLIENT
 -** React** : Front-end library for building user interfaces based on UI components.
 -** React-bootstrap ** : Component-based library that provides native Bootstrap components as pure React components
--** Axios ** : Communicate with the backend and it also supports the Promise API that is native to JS ES6.  
-It is a library which is used to make requests to an API, return data from the API, and then do things with that data in our React application. It also allows us to make HTTP  requests from the browser. 
--** Formik ** : It is a small group of React components and hooks for building forms in React and React Native. It helps with the three most annoying parts: Getting values in and out of form state. Validation and error messages. Handling form submission.
 -** Yup ** : Schema builder for value parsing and validation. Define a schema, transform a value to match, validate the shape of an existing value, or both. Yup schema is extremely expressive and allows modelling complex, interdependent validations, or value transformations.
 -** React Router ** : It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.
+-** DatePicker ** : A simple and reusable datepicker component for React.
+
 
 ## Development Dependancies
 

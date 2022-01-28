@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
 import { useParams, Link } from 'react-router-dom';
 
 const TeamPlayersById = () => {
@@ -12,8 +11,12 @@ const TeamPlayersById = () => {
 
     const getTeamPlayersById = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/team-players/${id}`)
-            setTeamPlayersById(response.data)
+            await fetch(`http://localhost:5000/team-players/${id}`,)
+                .then((response) => {
+                    return response.json();
+                }).then(data => {
+                    setTeamPlayersById(data)
+                })
         } catch (error) {
             console.log(error)
         }

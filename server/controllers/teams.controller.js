@@ -1,6 +1,15 @@
 const models = require('../models')
 const Team = models.teams
 
+exports.getTeamsParanoid = async (req, res) => {
+    try {
+        const teams = await Team.findAll({ paranoid: false })
+        return res.send(teams)
+    } catch (error) {
+        return res.send(error)
+    }
+}
+
 exports.getTeams = async (req, res) => {
     try {
         const teams = await Team.findAll()
@@ -9,7 +18,6 @@ exports.getTeams = async (req, res) => {
         return res.send(error)
     }
 }
-
 
 exports.getTeamById = async (req, res) => {
     try {

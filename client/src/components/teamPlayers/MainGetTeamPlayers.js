@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react'
-import axios from "axios";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { Spinner } from 'react-bootstrap';
 
 const TeamPlayers = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [teams, setTeams] = useState([]);
     useEffect(() => {
-        getTeamPlayers()
-    }, []);
-
-    useEffect(() => {
-        getTeams()
+        getTeamPlayers();
+        getTeams();
     }, []);
 
     const getTeamPlayers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/team-players')
-            const res = response.data.filter((value) => {
-                return value['p.id'] != null
-            })
-            setTeamPlayers(res)
+            await fetch('http://localhost:5000/team-players/',)
+                .then((response) => {
+                    return response.json();
+                }).then(data => {
+                    const res = data.filter((value) => {
+                        return value['p.id'] != null
+                    })
+                    setTeamPlayers(res)
+                    setIsLoading(false)
+                })
         } catch (error) {
             console.log(error)
         }
@@ -27,22 +30,29 @@ const TeamPlayers = () => {
 
     const getTeams = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/teams')
-            setTeams(response.data)
+
+            await fetch('http://localhost:5000/teams/',)
+                .then((response) => {
+                    return response.json();
+                }).then(data => {
+                    setTeams(data)
+                })
         } catch (error) {
             console.log(error)
         }
     }
 
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+
     return (
         <div >
-            <h2 className='centered'>All Team Players</h2>
-            <Link to={'/'} className='link'>Back to Home Page</Link>
+            <h2 className='centered' style={{marginBottom:'50px'}}>All Team Players</h2>
             <table>
                 <thead>
                     <tr>
                         <th>№</th>
-                        <th>Team Id</th>
                         <th>Team Name</th>
                         <th>Name</th>
                         <th>Age</th>
@@ -53,7 +63,6 @@ const TeamPlayers = () => {
                     {teamPlayers.map((value, index) => (
                         <tr key={value['p.id']}>
                             <td>{index + 1}.</td>
-                            <td>{value['p.teamId']}</td>
                             <td>{value['team_name']}</td>
                             <td>{value['p.name']}</td>
                             <td>{value['p.age']}</td>
@@ -63,7 +72,7 @@ const TeamPlayers = () => {
                 </tbody>
             </table>
             <div>
-                <h2 className='centered'>View Team Players</h2>
+                <h2 className='centered' style={{marginBottom:'50px'}}>View Team Players</h2>
                 <table>
                     <thead>
                         <th>№</th>
@@ -83,6 +92,7 @@ const TeamPlayers = () => {
                     </tbody>
                 </table>
             </div>
+            <Link to={'/'} className='link'>Back to Home Page</Link>
         </div>
     )
 }

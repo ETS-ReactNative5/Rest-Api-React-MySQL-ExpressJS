@@ -1,0 +1,14 @@
+.main {
+    margin: 0rem auto;
+    width: 100%;
+    max-width: 50rem;
+    height:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center; 
+    
+} 
+
+.background {
+    background-image: url("background.png");
+}

@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { Link, } from "react-router-dom";
-import axios from 'axios'
-import './Results.css'
+import { Spinner } from "react-bootstrap";
+
+
 const Results = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -11,8 +13,13 @@ const Results = () => {
 
   const getResults = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/results')
-      setResults(response.data)
+      await fetch('http://localhost:5000/results/',)
+        .then((data) => {
+          return data.json();
+        }).then(response => {
+          setResults(response)
+          setIsLoading(false)
+        })
     } catch (error) {
       console.log(error)
     }
@@ -20,11 +27,19 @@ const Results = () => {
 
   const deleteResult = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/results/${id}`)
-      setResults(results.filter(result => result.id !== id))
+      await fetch(`http://localhost:5000/results/${id}`, {
+        method: "DELETE",
+      }).then(response => {
+        setResults(results.filter(result => result.id !== id))
+        return response.json()
+      })
     } catch (error) {
       console.log(error)
     }
+  }
+
+  if (isLoading) {
+    return (<Spinner animation="border" variant="primary" />)
   }
 
   return (
@@ -48,8 +63,8 @@ const Results = () => {
           {results.map((result, index) => (
             <tr key={result.id}>
               <td>{index + 1}.</td>
-              <td>{result.host_id}</td>
-              <td>{result.guest_id}</td>
+              <td>{result['host.team_name']}</td>
+              <td>{result['guest.team_name']}</td>
               <td>{result.home_goals}</td>
               <td>{result.away_goals}</td>
               <td>{result.date}</td>

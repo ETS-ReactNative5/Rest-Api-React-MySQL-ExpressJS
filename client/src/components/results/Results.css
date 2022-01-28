@@ -44,8 +44,6 @@
   span {
     color: red;
   }
-
-  
  
   .centered {
     width: 100vw;
@@ -54,4 +52,8 @@
     align-items: center;
     padding-top: 40px;
     flex-direction: column;
+  }
+
+  .datePicker {
+    width: 100%;
   }

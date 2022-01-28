@@ -3,8 +3,15 @@ const Players = models.players
 
 exports.getPlayers = async (req, res) => {
     try {
-        const player = await Players.findAll()
-        return res.send(player)
+        const players = await Players.findAll({
+            include: [{
+                model: models.teams,
+                as: "teams",
+                attributes: ["team_name", "deletedAt"],
+                paranoid: false
+            }]
+        })
+        return res.send(players)
     } catch (error) {
         return res.send(error)
     }

@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
-import axios from "axios";
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from 'yup'
-import './Teams.css'
+import * as Yup from 'yup';
+import './Teams.css';
 import { Link } from 'react-router-dom';
 
 const AddTeam = () => {
@@ -14,9 +13,13 @@ const AddTeam = () => {
     }, []);
 
     const getTeams = async () => {
-        const response = await axios.get('http://localhost:5000/teams')
-        const team = response.data.map(team => team.team_name).flat();
-        setTeam(team)
+        await fetch('http://localhost:5000/teams/',)
+            .then((response) => {
+                return response.json();
+            }).then(data => {
+                const team = data.map(team => team.team_name).flat();
+                setTeam(team)
+            })
     }
 
     const initialValues = {
@@ -29,8 +32,13 @@ const AddTeam = () => {
     });
 
     const onSumbit = (data) => {
-        axios.post('http://localhost:5000/teams', data)
-        navigate('/')
+        fetch('http://localhost:5000/teams', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        }).then(() => {
+            navigate('/teams')
+        })
     }
 
     return (
@@ -50,7 +58,6 @@ const AddTeam = () => {
                     />
                     <button type="submit">Create Team</button>
                     <Link to={'/teams'} className='edit'>Cancel</Link>
-
                 </Form>
             </Formik>
         </div>

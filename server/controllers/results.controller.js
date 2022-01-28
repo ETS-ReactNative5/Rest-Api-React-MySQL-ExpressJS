@@ -3,8 +3,31 @@ const Results = models.results
 
 exports.getResults = async (req, res) => {
     try {
-        const results = await Results.findAll()
-        return res.send(results)
+        const host = await Results.findAll({
+            raw: true,
+            include: [{
+                model: models.teams,
+                as: "host",
+                attributes: ["team_name"]
+            }]
+        })
+        const guest = await Results.findAll({
+            raw: true,
+            include: [{
+                model: models.teams,
+                as: "guest",
+                attributes: ["team_name"]
+            }]
+        })
+
+        const teamName = [...host, ...guest]
+        const output = Object.values(teamName.reduce((accu, { id, ...rest }) => {
+            if (!accu[id]) accu[id] = {};
+            accu[id] = { id, ...accu[id], ...rest };
+            return accu;
+        }, {}));
+        
+        return res.send(output)
     } catch (error) {
         return res.send(error)
     }

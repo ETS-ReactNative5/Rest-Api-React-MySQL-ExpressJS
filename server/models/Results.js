@@ -59,6 +59,16 @@ const result = (sequelize, DataTypes) => {
             foreignKey: "guest_id",
             sourceKey: "id"
         })
+        Result.belongsTo(models.teams, {
+            as: "host",
+            foreignKey: "host_id",
+            sourceKey: "id"
+        })
+        Result.belongsTo(models.teams, {
+            as: "guest",
+            foreignKey: "guest_id",
+            sourceKey: "id"
+        })
     }
     Result.sync()
     return Result

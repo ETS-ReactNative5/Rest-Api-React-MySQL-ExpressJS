@@ -1,54 +1,74 @@
-import { useState, useEffect } from 'react'
-import axios from "axios";
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import './Results.css'
-
+import './Results.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddResult = () => {
-    const [hostId, setHostId] = useState([]);
-    const [guestId, setGuestId] = useState([]);
+    const [teamHost, setTeamHost] = useState([]);
+    const [teamGuest, setTeamGuest] = useState([]);
+    const [teams, setTeams] = useState([]);
+    const [date, setDate] = useState(new Date());
+
     const navigate = useNavigate();
     useEffect(() => {
-        getTeamId();
+        getTeams();
     }, []);
 
-    const getTeamId = async () => {
-        const response = await axios.get('http://localhost:5000/teams')
-        const teams = response.data.map(team => team.id).flat();
-        setHostId(teams)
-        setGuestId(teams)
+    const getTeams = async () => {
+        try {
+            await fetch('http://localhost:5000/teams/',)
+                .then((data) => {
+                    return data.json();
+                }).then(response => {
+                    setTeams(response)
+                    const teams = response.map(team => team.team_name).flat();
+                    setTeamHost(teams)
+                    setTeamGuest(teams)
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const initialValues = {
-        host_id: "",
-        guest_id: "",
+        host_name: "",
+        guest_name: "",
         home_goals: "",
         away_goals: "",
-        date: "",
         venue: "",
     };
 
     const validationSchema = Yup.object().shape({
-        host_id: Yup.number().required("Host Id field is required!").oneOf(hostId, 'No such host with this Id!'),
-        guest_id: Yup.number().required("Guest Id field is required!").oneOf(guestId, 'No such guest with this Id!')
-            .when('host_id', (host_id, schema) => {
+        host_name: Yup.string().required("Host field is required!").oneOf(teamHost, 'No such host!'),
+        guest_name: Yup.string().required("Guest field is required!").oneOf(teamGuest, 'No such guest!')
+            .when('host_name', (host_name, schema) => {
                 return schema.test({
-                    test: guest_id => guest_id !== host_id,
+                    test: guest_name => guest_name !== host_name,
                     message: 'One team cannot play against each other!'
                 })
             }),
-        home_goals: Yup.number("Goals is a number value!").required("Home Goals are required!").min(0,"Result cannot be negative!"),
+        home_goals: Yup.number("Goals is a number value!").required("Home Goals are required!").min(0, "Result cannot be negative!"),
         away_goals: Yup.number("Goals is a number value!").required("Away Goals are required!").min(0, "Result cannot be negative!"),
-        date: Yup.date().required("Date is required!"),
         venue: Yup.string().required("Venue is required!"),
     });
 
     const onSubmit = (data) => {
-        axios.post('http://localhost:5000/results', data)
-        navigate('/')
+        console.log(date)
+        console.log(data)
+        data.date = date
+        data.host_id = teams.find(team => team.team_name === data.host_name).id
+        data.guest_id = teams.find(team => team.team_name === data.guest_name).id
+        fetch('http://localhost:5000/results/', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        }).then(() => {
+            navigate('/results')
+        })
     };
 
     return (
@@ -59,20 +79,30 @@ const AddResult = () => {
                 validationSchema={validationSchema}
             >
                 <Form className="formContainer">
-                    <label>Host Id: </label>
-                    <ErrorMessage name="host_id" component="span" />
+                    <label>Host Name: </label>
+                    <ErrorMessage name="host_name" component="span" />
                     <Field
+                        component='select'
                         autocomplete="off"
                         id="inputCreateResult"
-                        name="host_id"
-                    />
-                    <label>Guest Id: </label>
-                    <ErrorMessage name="guest_id" component="span" />
+                        name="host_name"
+
+                    >
+                        <option label='Select a Host'></option>
+                        {teamHost.map((id) => <option key={id} value={id}>{id}</option>)}
+                    </Field>
+                    <label>Guest Name: </label>
+                    <ErrorMessage name="guest_name" component="span" />
                     <Field
+                        component='select'
                         autocomplete="off"
                         id="inputCreateResult"
-                        name="guest_id"
-                    />  <label>Home Goals: </label>
+                        name="guest_name"
+                    >
+                        <option label='Select a Guest'></option>
+                        {teamGuest.map((id) => <option key={id} value={id}>{id}</option>)}
+                    </Field>
+                    <label>Home Goals: </label>
                     <ErrorMessage name="home_goals" component="span" />
                     <Field
                         autocomplete="off"
@@ -87,13 +117,7 @@ const AddResult = () => {
                         name="away_goals"
                     />
                     <label>Date: </label>
-                    <ErrorMessage name="date" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreateResult"
-                        name="date"
-                        placeholder="(Ex. 2022-01-11)"
-                    />
+                    <DatePicker className="datePicker" selected={date} onChange={(date) => setDate(date)} />
                     <label>Venue: </label>
                     <ErrorMessage name="venue" component="span" />
                     <Field
