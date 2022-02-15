@@ -9,7 +9,7 @@ exports.getAllTeamsPlayers = async (req, res) => {
             attributes: ['team_name', 'id'],
             include: [{
                 model: models.players,
-                as: "p",
+                as: "players",
             }],
         })
         return res.send(team_players)
@@ -25,7 +25,7 @@ exports.getTeamPlayersById = async (req, res) => {
             raw: true,
             include: [{
                 model: models.players,
-                as: "p",
+                as: "players",
             }],
         })
         return res.send(team_players)

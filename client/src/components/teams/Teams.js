@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button, ButtonGroup } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Teams = () => {
+    const { REACT_APP_URL_TEAMS } = process.env
+    const URL = REACT_APP_URL_TEAMS
+
     const [isLoading, setIsLoading] = useState(true);
     const [teams, setTeams] = useState([]);
 
@@ -13,11 +16,10 @@ const Teams = () => {
 
     const getTeams = async () => {
         try {
-            await fetch('http://localhost:5000/teams/',)
-                .then((data) => {
-                    return data.json();
-                }).then(response => {
-                    setTeams(response)
+            const response = await fetch(URL)
+            return response.json()
+                .then(data => {
+                    setTeams(data)
                     setIsLoading(false)
                 })
         } catch (error) {
@@ -31,7 +33,7 @@ const Teams = () => {
 
     const deleteTeam = async (id) => {
         try {
-            await fetch(`http://localhost:5000/teams/${id}`, {
+            await fetch(`${URL}/${id}`, {
                 method: "DELETE",
             }).then(response => {
                 setTeams(teams.filter(team => team.id !== id))
@@ -43,14 +45,14 @@ const Teams = () => {
     }
 
     return (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h2 className='centered'>Clubs</h2>
-            <Link to="/Teams/add" className="link">Add New</Link>
+            <div style={{ textAlign: "left" }}><Link to="/Teams/add" className="link">Add New</Link></div>
             <table>
                 <thead>
                     <tr >
                         <th>№</th>
-                        <th>Team</th>
+                        <th style={{ width: "50%" }}>Team</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -60,15 +62,17 @@ const Teams = () => {
                             <td>{index + 1}.</td>
                             <td>{team.team_name}</td>
                             <td>
-                                <Link to={`/Teams/${team.id}`} className='link'>View</Link>
-                                <Link to={`/Teams/edit/${team.id}`} className='edit'>Edit</Link>
-                                <button onClick={() => deleteTeam(team.id)}>Delete</button>
+                                <ButtonGroup>
+                                    <Link to={`/Teams/${team.id}`} className='link'>View</Link>
+                                    <Link to={`/Teams/edit/${team.id}`} className='edit'>Edit</Link>
+                                    <Button variant="danger" onClick={() => deleteTeam(team.id)}>Delete</Button>
+                                </ButtonGroup>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <Link to={'/'} className='link'>Back To Home Page</Link>
+            <div style={{ textAlign: "left" }}><Link to={'/'} className='link'>Back To Home Page</Link></div>
         </div>
     )
 }

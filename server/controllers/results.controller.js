@@ -25,14 +25,12 @@ exports.getResults = async (req, res) => {
             if (!accu[id]) accu[id] = {};
             accu[id] = { id, ...accu[id], ...rest };
             return accu;
-        }, {}));
-        
+        }, {}));   
         return res.send(output)
     } catch (error) {
         return res.send(error)
     }
 }
-
 
 exports.getResultById = async (req, res) => {
     try {

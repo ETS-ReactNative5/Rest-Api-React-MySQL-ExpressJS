@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, } from "react-router-dom";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from 'yup';
+import { Form } from 'react-bootstrap'
 import './Teams.css';
 
 const EditTeam = () => {
+    const { REACT_APP_URL_TEAMS } = process.env
+    const URL = REACT_APP_URL_TEAMS
+
     const [team, setTeam] = useState([]);
     const [team_name, setTeamName] = useState([]);
     const { id } = useParams();
@@ -18,10 +22,9 @@ const EditTeam = () => {
 
     const getTeams = async () => {
         try {
-            await fetch('http://localhost:5000/teams/',)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
+            const response = await fetch(URL)
+            return response.json()
+                .then(data => {
                     const team = data.map(team => team.team_name).flat();
                     setTeam(team)
                 })
@@ -31,10 +34,9 @@ const EditTeam = () => {
     }
     const getTeamValues = async () => {
         try {
-            await fetch(`http://localhost:5000/teams/${id}`,)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
+            const response = await fetch(`${URL}/${id}`,)
+            return response.json()
+                .then(data => {
                     const teamName = data.teamPlayers.map(team => team.team_name).flat();
                     setTeamName(teamName[0])
                 })
@@ -54,12 +56,12 @@ const EditTeam = () => {
     };
 
     const validationSchema = Yup.object().shape({
-        team_name: Yup.string().required().min(3, "Team name is too short, minimum is 3 characters!").max(20, "Team name is too long, maximum is 20 characters!")
+        team_name: Yup.string().required("Team Name field is required!").min(3, "Team name is too short, minimum is 3 characters!").max(20, "Team name is too long, maximum is 20 characters!")
             .notOneOf(team, 'Team with this name exists!')
     });
 
     const onSubmit = (data) => {
-        fetch(`http://localhost:5000/teams/${id}`, {
+        fetch(`${URL}/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -76,17 +78,25 @@ const EditTeam = () => {
                 onSubmit={onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form className="formContainer">
-                    <label>Team Name:</label>
-                    <ErrorMessage name="team_name" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreateTeam"
-                        name="team_name"
-                    />
-                    <button type="submit">Edit</button>
-                    <Link to={'/teams'} className='edit'>Cancel</Link>
-                </Form>
+                {({ values, errors, handleBlur, handleChange, handleSubmit }) => (
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="formContainer" md="4">
+                            <Form.Label>Team Name:</Form.Label>
+                            <ErrorMessage name="team_name" component="span" />
+                            <Form.Control
+                                autocomplete="off"
+                                id="inputCreateTeam"
+                                name="team_name"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.team_name}
+                                isInvalid={!!errors.team_name}
+                            />
+                            <button type="submit">Edit</button>
+                            <Link to={'/teams'} className='edit'>Cancel</Link>
+                        </Form.Group>
+                    </Form>
+                )}
             </Formik>
         </div>
     )

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate, Link } from 'react-router-dom';
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import './Teams.css';
-import { Link } from 'react-router-dom';
+import { Form } from 'react-bootstrap'
 
 const AddTeam = () => {
+    const { REACT_APP_URL_TEAMS } = process.env
+    const URL = REACT_APP_URL_TEAMS
+
     const navigate = useNavigate();
     const [teams, setTeam] = useState([]);
     useEffect(() => {
@@ -13,10 +16,9 @@ const AddTeam = () => {
     }, []);
 
     const getTeams = async () => {
-        await fetch('http://localhost:5000/teams/',)
-            .then((response) => {
-                return response.json();
-            }).then(data => {
+        const response = await fetch(URL)
+        return response.json()
+            .then(data => {
                 const team = data.map(team => team.team_name).flat();
                 setTeam(team)
             })
@@ -31,8 +33,8 @@ const AddTeam = () => {
             .notOneOf(teams, 'Team with this name exists!')
     });
 
-    const onSumbit = (data) => {
-        fetch('http://localhost:5000/teams', {
+    const onSubmit = (data) => {
+        fetch(URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -45,20 +47,29 @@ const AddTeam = () => {
         <div className="createTeamPage">
             <Formik
                 initialValues={initialValues}
-                onSubmit={onSumbit}
+                onSubmit={onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form className="formContainer">
-                    <label>Team Name:</label>
-                    <ErrorMessage name="team_name" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreateTeam"
-                        name="team_name"
-                    />
-                    <button type="submit">Create Team</button>
-                    <Link to={'/teams'} className='edit'>Cancel</Link>
-                </Form>
+                {({ values, errors, handleBlur, handleChange, handleSubmit }) => (
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="formContainer" md="4">
+                            <Form.Label>Team Name:</Form.Label>
+                            <ErrorMessage name="team_name" component="span" />
+                            <Form.Control
+                                type="text"
+                                autocomplete="off"
+                                id="inputCreateTeam"
+                                name="team_name"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.team_name}
+                                isInvalid={!!errors.team_name}
+                            />
+                            <button type="submit">Create Team</button>
+                            <Link to={'/teams'} className='edit'>Cancel</Link>
+                        </Form.Group>
+                    </Form>
+                )}
             </Formik>
         </div>
     );

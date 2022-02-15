@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize,) => {
-    await queryInterface.createTable('Teams', {
+    await queryInterface.createTable('teams', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
 
         validate: {
-          len: [3, 10],
+          len: [3, 20],
           notNull: { msg: "You need to provide team name" }
         }
       },
@@ -44,6 +44,6 @@ module.exports = {
     }
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Teams');
+    await queryInterface.dropTable('teams');
   }
 };

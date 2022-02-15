@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, } from "react-router-dom";
 import './Players.css';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Button, ButtonGroup } from 'react-bootstrap';
 
 const Players = () => {
+  const { REACT_APP_URL_PLAYERS } = process.env
+  const URL = REACT_APP_URL_PLAYERS
+
   const [isLoading, setIsLoading] = useState(true);
   const [players, setPlayers] = useState([]);
   const [paranoidTeams, setParanoidTeams] = useState([]);
@@ -15,14 +18,11 @@ const Players = () => {
 
   const getPlayers = async () => {
     try {
-      await fetch('http://localhost:5000/players/',)
-        .then((response) => {
-          return response.json();
-        }).then(data => {
-          const teamExists = data.filter(players => (players.teams.deletedAt === null))
-          setPlayers(teamExists)
-          const paranoid = data.filter(players => (players.teams.deletedAt !== null))
-          setParanoidTeams(paranoid)
+      const response = await fetch(URL)
+      return response.json()
+        .then(data => {
+          setPlayers(data.teamExists)
+          setParanoidTeams(data.paranoid)
           setIsLoading(false)
         })
     } catch (error) {
@@ -32,7 +32,7 @@ const Players = () => {
 
   const deletePlayer = async (id) => {
     try {
-      await fetch(`http://localhost:5000/players/${id}`, { method: "DELETE" })
+      await fetch(`${URL}/${id}`, { method: "DELETE" })
         .then((data) => {
           setPlayers(players.filter(player => player.id !== id))
           setParanoidTeams(paranoidTeams.filter(player => player.id !== id))
@@ -48,9 +48,9 @@ const Players = () => {
   }
 
   return (
-    <div>
+    <div style={{ textAlign: 'center' }}>
       <h2 className='centered'>Players</h2>
-      <Link to="/Players/add" className="link">Add New</Link>
+      <div style={{ textAlign: 'left' }}><Link to="/Players/add" className="link">Add New</Link></div>
       <table>
         <thead>
           <tr>
@@ -71,14 +71,16 @@ const Players = () => {
               <td>{player.position}</td>
               <td>{player.age}</td>
               <td>
-                <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
-                <button onClick={() => deletePlayer(player.id)}>Delete</button>
+                <ButtonGroup>
+                  <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
+                  <Button variant='danger' onClick={() => deletePlayer(player.id)}>Delete</Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <h2 className='centered' style={{marginBottom:'50px'}}>Free Transfers</h2>
+      <h2 className='centered' style={{ marginBottom: '50px' }}>Free Transfers</h2>
       <table>
         <thead>
           <tr>
@@ -97,14 +99,16 @@ const Players = () => {
               <td>{player.position}</td>
               <td>{player.age}</td>
               <td>
-                <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
-                <button onClick={() => deletePlayer(player.id)}>Delete</button>
+                <ButtonGroup>
+                  <Link to={`/Players/edit/${player.id}`} className='edit'>Edit</Link>
+                  <Button variant='danger' onClick={() => deletePlayer(player.id)}>Delete</Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Link to={'/'} className="link">Back To Home Page</Link>
+      <div style={{ textAlign: 'left' }}><Link to={'/'} className="link">Back To Home Page</Link></div>
     </div>
   )
 }

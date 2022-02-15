@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom';
 
 const TeamPlayersById = () => {
+    const { REACT_APP_URL_TEAM_PLAYERS } = process.env
+    const URL = REACT_APP_URL_TEAM_PLAYERS
+
     const [teamPlayersById, setTeamPlayersById] = useState([]);
     const { id } = useParams();
 
@@ -11,10 +14,9 @@ const TeamPlayersById = () => {
 
     const getTeamPlayersById = async () => {
         try {
-            await fetch(`http://localhost:5000/team-players/${id}`,)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
+            const response = await fetch(`${URL}/${id}`,)
+            return response.json()
+                .then(data => {
                     setTeamPlayersById(data)
                 })
         } catch (error) {
@@ -23,12 +25,12 @@ const TeamPlayersById = () => {
     }
 
     return (
-        <div>
+        <div style={{ textAlign: 'center' }}>
             <h2 className='centered'>Players</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>№</th>
+                        <th style={{ width: "20%" }}>№</th>
                         <th>Name</th>
                         <th>Position</th>
                         <th>Age</th>
@@ -36,15 +38,17 @@ const TeamPlayersById = () => {
                 </thead>
                 <tbody>
                     {teamPlayersById.map((value, index) => (
-                        <tr key={value['p.id']}>
+                        <tr key={value['players.id']}>
                             <td>{index + 1}.</td>
-                            <td>{value['p.name']}</td>
-                            <td>{value['p.age']}</td>
-                            <td>{value['p.position']}</td>
+                            <td>{value['players.name']}</td>
+                            <td>{value['players.age']}</td>
+                            <td>{value['players.position']}</td>
                         </tr>
                     ))}
-                    <div> <Link to={'/Team-Players'} className='link'>Back To Team Players</Link> </div>
-                    <div> <Link to={'/'} className='link'>Home Page</Link> </div>
+                    <div style={{ textAlign: "left" }}>
+                        <Link to={'/Team-Players'} className='link'>Back To Team Players</Link>
+                        <Link to={'/'} className='link'>Home Page</Link>
+                    </div>
                 </tbody>
             </table>
         </div>

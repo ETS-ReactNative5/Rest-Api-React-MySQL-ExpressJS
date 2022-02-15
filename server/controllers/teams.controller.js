@@ -27,7 +27,7 @@ exports.getTeamById = async (req, res) => {
             raw: true,
             include: [{
                 model: models.results,
-                as: "h",
+                as: "homeTeam",
             }]
         })
         const awayResults = await Team.findAll({
@@ -36,7 +36,7 @@ exports.getTeamById = async (req, res) => {
             raw: true,
             include: [{
                 model: models.results,
-                as: "a",
+                as: "awayTeam",
             }]
         })
         const teamPlayers = await Team.findAll({
@@ -45,7 +45,7 @@ exports.getTeamById = async (req, res) => {
             raw: true,
             include: [{
                 model: models.players,
-                as: "p"
+                as: "players"
             }]
         })
         return res.send({ homeResults, awayResults, teamPlayers })

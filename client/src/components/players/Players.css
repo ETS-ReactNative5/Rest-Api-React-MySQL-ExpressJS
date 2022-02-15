@@ -16,7 +16,7 @@
     border: 5px solid black;
     border-radius: 5px;
   }
-  
+
   .formContainer #inputCreatePlayer {
     height: 40px;
     margin-top: 10px;
@@ -67,3 +67,4 @@
 width: 10.5em;
 margin: 0 auto;
 }
+

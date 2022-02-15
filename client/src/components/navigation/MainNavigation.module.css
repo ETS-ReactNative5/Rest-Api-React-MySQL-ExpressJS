@@ -1,15 +1,9 @@
 .header {
-    width: 100%;
-    height: 5rem;
-    display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color:rgb(218, 18, 101);
-    outline: 1px solid black;
-    padding: 0 3%;
+    outline: 8px solid black;
 
   }
-
 
   .logo {
     font-size: 2rem;
@@ -33,13 +27,13 @@
   .header a {
     text-decoration: none;
     font-size: 1.5rem;
-    color: black;
+    color: white;
   }
   
   .header a:hover,
   .header a:active,
   .header a.active {
-    color: white;
+    color: #cc2062;
   }
   
   .badge {

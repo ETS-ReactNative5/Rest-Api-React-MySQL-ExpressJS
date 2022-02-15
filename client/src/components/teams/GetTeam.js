@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Team = () => {
+    const { REACT_APP_URL_TEAMS } = process.env
+    const URL = REACT_APP_URL_TEAMS
+
     const [homeResults, sethomeResults] = useState([]);
     const [awayResults, setAwayResult] = useState([]);
     const [players, setPlayers] = useState([]);
@@ -14,10 +17,9 @@ const Team = () => {
 
     const getTeamById = async () => {
         try {
-            await fetch(`http://localhost:5000/teams/${id}`,)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
+            const response = await fetch(`${URL}/${id}`,)
+            return response.json()
+                .then(data => {
                     const homeRes = data.homeResults
                     sethomeResults(homeRes)
                     const awayRes = data.awayResults
@@ -31,9 +33,8 @@ const Team = () => {
     }
 
     return (
-        <div>
+        <div style={{ textAlign: "center" }}>
             <h2 className='centered'>Home Results</h2>
-            <Link to={'/teams'} className='link'>Back to Teams</Link>
             <table>
                 <thead>
                     <tr>
@@ -47,21 +48,21 @@ const Team = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {homeResults.map((hres, index) => (
-                        <tr key={hres.id}>
+                    {homeResults.map((homeResult, index) => (
+                        <tr key={homeResult.id}>
                             <td>{index + 1}.</td>
-                            <td>{hres['h.host_id']}</td>
-                            <td>{hres['h.guest_id']}</td>
-                            <td>{hres['h.home_goals']}</td>
-                            <td>{hres['h.away_goals']}</td>
-                            <td>{hres['h.date']} </td>
-                            <td>{hres['h.venue']}</td>
+                            <td>{homeResult['homeTeam.host_id']}</td>
+                            <td>{homeResult['homeTeam.guest_id']}</td>
+                            <td>{homeResult['homeTeam.home_goals']}</td>
+                            <td>{homeResult['homeTeam.away_goals']}</td>
+                            <td>{homeResult['homeTeam.date']} </td>
+                            <td>{homeResult['homeTeam.venue']}</td>
 
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <h2 className='centered'>Away Results</h2>
+            <h2 className='centered' style={{ marginBottom: '50px' }} >Away Results</h2>
             <table>
                 <thead>
                     <tr>
@@ -75,15 +76,15 @@ const Team = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {awayResults.map((ares, index) => (
-                        <tr key={ares.id}>
+                    {awayResults.map((awayResult, index) => (
+                        <tr key={awayResult.id}>
                             <td>{index + 1}.</td>
-                            <td>{ares['a.host_id']}</td>
-                            <td>{ares['a.guest_id']}</td>
-                            <td>{ares['a.home_goals']}</td>
-                            <td>{ares['a.away_goals']}</td>
-                            <td>{ares['a.date']} </td>
-                            <td>{ares['a.venue']}</td>
+                            <td>{awayResult['awayTeam.host_id']}</td>
+                            <td>{awayResult['awayTeam.guest_id']}</td>
+                            <td>{awayResult['awayTeam.home_goals']}</td>
+                            <td>{awayResult['awayTeam.away_goals']}</td>
+                            <td>{awayResult['awayTeam.date']} </td>
+                            <td>{awayResult['awayTeam.venue']}</td>
 
                         </tr>
                     ))}
@@ -103,13 +104,15 @@ const Team = () => {
                     {players.map((player, index) => (
                         <tr key={player.id}>
                             <td>{index + 1}.</td>
-                            <td>{player['p.name']}</td>
-                            <td>{player['p.position']}</td>
-                            <td>{player['p.age']}</td>
+                            <td>{player['players.name']}</td>
+                            <td>{player['players.position']}</td>
+                            <td>{player['players.age']}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            <div style={{ textAlign: "left" }}><Link to={'/teams'} className='link'>Back to Teams</Link></div>
+            <div style={{ textAlign: "left" }}><Link to={'/'} className='link'>Back to Home Page</Link></div>
         </div>
     )
 }

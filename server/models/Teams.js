@@ -19,16 +19,16 @@ const team = (sequelize, DataTypes) => {
     Team.associate = models => {
         Team.belongsTo(models.players, {
             foreignKey: "id",
-            as: 'p',
+            as: 'players',
             targetKey: "teamId"
         })
         Team.belongsTo(models.results, {
-            as: "h",
+            as: "homeTeam",
             foreignKey: "id",
             targetKey: "host_id",
         })
         Team.belongsTo(models.results, {
-            as: "a",
+            as: "awayTeam",
             foreignKey: "id",
             targetKey: "guest_id",
         })

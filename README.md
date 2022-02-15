@@ -29,8 +29,8 @@ teams, players, team-players and results.
 -** React-bootstrap ** : Component-based library that provides native Bootstrap components as pure React components
 -** Yup ** : Schema builder for value parsing and validation. Define a schema, transform a value to match, validate the shape of an existing value, or both. Yup schema is extremely expressive and allows modelling complex, interdependent validations, or value transformations.
 -** React Router ** : It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.
--** DatePicker ** : A simple and reusable datepicker component for React.
 
+ 
 
 ## Development Dependancies
 
@@ -49,6 +49,15 @@ DB_HOST=your-db-host
 DB_USER=your-db-username
 DB_PASS=your-db-password
 DB_SCHEMA=your-db-schema-name
+```
+In client's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration.
+```
+#URL for your Backend/server 
+REACT_APP_URL= ex. http://localhost:8000
+REACT_APP_URL_TEAMS= Your server address
+REACT_APP_URL_PLAYERS= Your server address
+REACT_APP_URL_RESULTS= Your server address
+REACT_APP_URL_TEAM_PLAYERS= Your server address
 ```
 ## Migrating the tables
 Before you start the server you need to migrate the tables into the database:

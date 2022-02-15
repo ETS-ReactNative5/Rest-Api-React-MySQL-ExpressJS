@@ -11,7 +11,9 @@ exports.getPlayers = async (req, res) => {
                 paranoid: false
             }]
         })
-        return res.send(players)
+        const teamExists = players.filter(player => (player.teams.deletedAt === null))
+        const paranoid = players.filter(player => (player.teams.deletedAt !== null))
+        return res.send({ teamExists, paranoid, players })
     } catch (error) {
         return res.send(error)
     }
@@ -29,10 +31,6 @@ exports.getPlayerById = async (req, res) => {
 
 
 exports.createPlayer = async (req, res) => {
-    const teamId = req.body.teamId;
-    const name = req.body.name;
-    const age = req.body.age;
-    const position = req.body.position;
     try {
         await Players.findAll({
             include: [{

@@ -1,11 +1,15 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
+import { useNavigate, Link } from 'react-router-dom';
+import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
 import './Players.css';
 
 const AddPlayer = () => {
+    const { REACT_APP_URL_PLAYERS, REACT_APP_URL_TEAMS } = process.env
+    const URL = REACT_APP_URL_PLAYERS
+    const URL_TEAMS = REACT_APP_URL_TEAMS
+
     const [teamName, setTeamName] = useState([]);
     const [teams, setTeams] = useState([]);
     const [players, setPlayers] = useState([]);
@@ -17,10 +21,9 @@ const AddPlayer = () => {
 
     const getTeams = async () => {
         try {
-            await fetch('http://localhost:5000/teams',)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
+            const response = await fetch(URL_TEAMS)
+            return response.json()
+                .then(data => {
                     setTeams(data)
                     const team_name = data.map(team => team.team_name).flat();
                     setTeamName(team_name)
@@ -32,11 +35,10 @@ const AddPlayer = () => {
 
     const getPlayers = async () => {
         try {
-            await fetch('http://localhost:5000/players/',)
-                .then((response) => {
-                    return response.json();
-                }).then(data => {
-                    const player = data.map(player => player.name).flat();
+            const response = await fetch(URL)
+            return response.json()
+                .then(data => {
+                    const player = data.players.map(player => player.name).flat();
                     setPlayers(player)
                 })
         } catch (error) {
@@ -61,7 +63,7 @@ const AddPlayer = () => {
 
     const onSubmit = async (data) => {
         data.teamId = teams.find(team => team.team_name === data.team_name).id
-        fetch('http://localhost:5000/players', {
+        fetch(URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
@@ -76,42 +78,68 @@ const AddPlayer = () => {
                 onSubmit={onSubmit}
                 validationSchema={validationSchema}
             >
-                <Form className="formContainer">
-                    <label>Team Name: </label>
-                    <ErrorMessage name="team_name" component="span" />
-                    <Field
-                        component="select"
-                        autocomplete="off"
-                        id="inputCreatePlayer"
-                        name="team_name"
-                    >
-                        <option label='Select Team'></option>
-                        {teamName.map((id) => <option key={id} value={id}>{id}</option>)}
-                    </Field>
-                    <label>Name: </label>
-                    <ErrorMessage name="name" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreatePlayer"
-                        name="name"
-                    />
-                    <label>Position: </label>
-                    <ErrorMessage name="position" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreatePlayer"
-                        name="position"
-                    />
-                    <label>Age: </label>
-                    <ErrorMessage name="age" component="span" />
-                    <Field
-                        autocomplete="off"
-                        id="inputCreatePlayer"
-                        name="age"
-                    />
-                    <button type="submit"> Create Player </button>
-                    <Link to={'/players'} className='edit'>Cancel</Link>
-                </Form>
+                {({ values, errors, handleBlur, handleChange, handleSubmit }) => (
+                    <Form className="formContainer" onSubmit={handleSubmit}>
+                        <Form.Group >
+                            <div><Form.Label>Team Name:</Form.Label></div>
+                            <ErrorMessage name="team_name" component="span" />
+                            <Form.Select
+                                id="inputCreatePlayer"
+                                name="team_name"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.team_name}
+                                isInvalid={!!errors.team_name}
+                            >
+                                <option label='Select Team'></option>
+                                {teamName.map((id) => <option key={id} value={id}>{id}</option>)}
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group >
+                            <div><Form.Label>Name:</Form.Label></div>
+                            <ErrorMessage name="name" component="span" />
+                            <Form.Control
+                                type="text"
+                                autocomplete="off"
+                                id="inputCreatePlayer"
+                                name="name"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.name}
+                                isInvalid={!!errors.name}
+                            />
+                        </Form.Group>
+                        <Form.Group >
+                            <div> <Form.Label>Position:</Form.Label></div>
+                            <ErrorMessage name="position" component="span" />
+                            <Form.Control
+                                type="text"
+                                autocomplete="off"
+                                id="inputCreatePlayer"
+                                name="position"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.position}
+                                isInvalid={!!errors.position}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <div><Form.Label>Age:</Form.Label></div>
+                            <ErrorMessage name="age" component="span" />
+                            <Form.Control
+                                autocomplete="off"
+                                id="inputCreatePlayer"
+                                name="age"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.age}
+                                isInvalid={!!errors.age}
+                            />
+                        </Form.Group>
+                        <button type="submit"> Create Player </button>
+                        <Link to={'/players'} className='edit'>Cancel</Link>
+                    </Form>
+                )}
             </Formik>
         </div>
     );

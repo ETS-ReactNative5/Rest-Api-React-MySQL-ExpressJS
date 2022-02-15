@@ -105,3 +105,9 @@
     background-color: #cc2062;
     color: white;
   }
+
+  .error {
+    border: 2px solid #FF6565;
+  }
+  
+ 
