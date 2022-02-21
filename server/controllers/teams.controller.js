@@ -23,7 +23,7 @@ exports.getTeamById = async (req, res) => {
     try {
         const homeResults = await Team.findAll({
             where: { id: req.params.id },
-            attributes: [],
+            attributes: ['team_name'],
             raw: true,
             include: [{
                 model: models.results,
@@ -32,13 +32,15 @@ exports.getTeamById = async (req, res) => {
         })
         const awayResults = await Team.findAll({
             where: { id: req.params.id },
-            attributes: [],
+            attributes: ['team_name'],
             raw: true,
             include: [{
                 model: models.results,
                 as: "awayTeam",
             }]
         })
+        const allTeamNames = await Team.findAll({attributes:["team_name", "id"]})
+
         const teamPlayers = await Team.findAll({
             where: { id: req.params.id },
             attributes: ['team_name'],
@@ -48,7 +50,12 @@ exports.getTeamById = async (req, res) => {
                 as: "players"
             }]
         })
-        return res.send({ homeResults, awayResults, teamPlayers })
+        const awayResultHostId = awayResults.map(teamId=>teamId['awayTeam.host_id'])
+        const homeResultGuestId = homeResults.map(teamId=>teamId['homeTeam.guest_id'])
+        const hostTeamName = allTeamNames.filter(team=> awayResultHostId.includes(team.id))
+        const guestTeamName = allTeamNames.filter(team=> homeResultGuestId.includes(team.id))
+
+        return res.send({ homeResults, awayResults, teamPlayers, hostTeamName, guestTeamName })
     } catch (error) {
         return res.send(error)
     }
