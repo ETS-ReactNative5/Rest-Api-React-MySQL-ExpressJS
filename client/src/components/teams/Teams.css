@@ -68,6 +68,17 @@
     background-color: #cc2062;
     color: white;
   }
+tr {
+text-align: center;
+}
+
+table.teams th:nth-child(1) {
+  width: 10% 
+ }
+
+table.teams th:nth-child(2) {
+   width: 50% 
+  }
 
   a.link:link,  a.link:visited {
     background-color: #cc2062;
@@ -82,6 +93,19 @@
     background-color: #bb5179;
   }
 
+  a.add:link,  a.add:visited {
+    background-color: #cc2062;
+    color: white;
+    text-align: left;
+    padding: 14px 25px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  a.add:hover, a.add:active {
+    background-color: #bb5179;
+  }
+  
   .centered {
     width: 100vw;
     height: auto;
@@ -89,6 +113,15 @@
     align-items: center;
     padding-top: 40px;
     flex-direction: column;
+  }
+  .centeredSecond {
+    width: 100vw;
+    height: auto;
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    flex-direction: column;
+    margin-bottom: 50px;
   }
 
  a.edit:link, a.edit:visited {
@@ -109,5 +142,34 @@
   .error {
     border: 2px solid #FF6565;
   }
-  
+
+  table.getTeams th:nth-child(1) {
+    width: 6%
+   }
+   table.getTeams th:nth-child(2) {
+    width: 12%
+   }
+  table.getTeams th:nth-child(3) {
+   width: 25%
+  }
+  table.getTeams th:nth-child(4) {
+    width: 8%
+  }
+  table.getTeams th:nth-child(5) {
+    width: 8%
+  }
+  table.getTeams th:nth-child(6) {
+    width: 25%
+  }
+  table.getTeams th:nth-child(7) {
+    width: 20%
+  }
+
+  table.getPlayers th:nth-child(1) {
+    width: 15%
+  }
+  table.getPlayers th:nth-child(2) {
+    width: 35%
+  }
+
  

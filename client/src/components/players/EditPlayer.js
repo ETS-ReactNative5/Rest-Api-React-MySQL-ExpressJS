@@ -6,9 +6,7 @@ import * as Yup from 'yup';
 import './Players.css';
 
 const EditPlayer = () => {
-    const { REACT_APP_URL_PLAYERS, REACT_APP_URL_TEAMS } = process.env
-    const URL = REACT_APP_URL_PLAYERS
-    const URL_TEAMS = REACT_APP_URL_TEAMS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [teams, setTeams] = useState([]);
     const [teamName, setTeamName] = useState([]);
@@ -30,7 +28,7 @@ const EditPlayer = () => {
 
     const getTeams = async () => {
         try {
-            const response = await fetch(URL_TEAMS)
+            const response = await fetch(`${BASE_URL}/teams`)
             return response.json()
                 .then(data => {
                     setTeams(data)
@@ -44,7 +42,7 @@ const EditPlayer = () => {
 
     const getPlayer = async () => {
         try {
-            const response = await fetch(URL)
+            const response = await fetch(`${BASE_URL}/players`)
             return response.json()
                 .then(data => {
                     const players = data.players.map(player => player.name).flat();
@@ -57,7 +55,7 @@ const EditPlayer = () => {
 
     const getPlayerValues = async () => {
         try {
-            const response = await fetch(`${URL}/${id}`,)
+            const response = await fetch(`${BASE_URL}/players/${id}`,)
             return response.json()
                 .then(data => {
                     setName(data.name)
@@ -96,7 +94,7 @@ const EditPlayer = () => {
 
     const onSubmit = async (data) => {
         data.teamId = await teams.find(team => team.team_name === data.team_name).id
-        fetch(`${URL}/${id}`, {
+        fetch(`${BASE_URL}/players/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

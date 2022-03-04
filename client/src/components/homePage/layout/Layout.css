@@ -10,7 +10,7 @@
 } 
 
 .background {
-    background-image: url("background.png");
+    background-image: url("../images/background.png");
 }
 
 .margin {
@@ -33,4 +33,14 @@
     width: 170vh;
     height: 270px;
     text-align: justify;
+}
+
+.paragraph {
+    padding: 3px;
+    font-size: 120%;
+    font-family: verdana;
+}
+
+.center {
+    text-align: center;
 }

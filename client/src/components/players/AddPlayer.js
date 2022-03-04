@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from 'yup';
 import './Players.css';
 
 const AddPlayer = () => {
-    const { REACT_APP_URL_PLAYERS, REACT_APP_URL_TEAMS } = process.env
-    const URL = REACT_APP_URL_PLAYERS
-    const URL_TEAMS = REACT_APP_URL_TEAMS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [teamName, setTeamName] = useState([]);
     const [teams, setTeams] = useState([]);
@@ -21,7 +19,7 @@ const AddPlayer = () => {
 
     const getTeams = async () => {
         try {
-            const response = await fetch(URL_TEAMS)
+            const response = await fetch(`${BASE_URL}/teams`)
             return response.json()
                 .then(data => {
                     setTeams(data)
@@ -35,7 +33,7 @@ const AddPlayer = () => {
 
     const getPlayers = async () => {
         try {
-            const response = await fetch(URL)
+            const response = await fetch(`${BASE_URL}/players`)
             return response.json()
                 .then(data => {
                     const player = data.players.map(player => player.name).flat();
@@ -63,7 +61,7 @@ const AddPlayer = () => {
 
     const onSubmit = async (data) => {
         data.teamId = teams.find(team => team.team_name === data.team_name).id
-        fetch(URL, {
+        fetch(`${BASE_URL}/players`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

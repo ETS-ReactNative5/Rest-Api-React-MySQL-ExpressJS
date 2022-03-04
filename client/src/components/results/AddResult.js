@@ -6,9 +6,7 @@ import * as Yup from 'yup';
 import './Results.css';
 
 const AddResult = () => {
-    const { REACT_APP_URL_RESULTS, REACT_APP_URL_TEAMS } = process.env
-    const URL = REACT_APP_URL_RESULTS
-    const URL_TEAMS = REACT_APP_URL_TEAMS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [teamHost, setTeamHost] = useState([]);
     const [teamGuest, setTeamGuest] = useState([]);
@@ -21,7 +19,7 @@ const AddResult = () => {
 
     const getTeams = async () => {
         try {
-            const response = await fetch(URL_TEAMS)
+            const response = await fetch(`${BASE_URL}/teams`)
             return response.json()
                 .then(data => {
                     setTeams(data)
@@ -61,7 +59,7 @@ const AddResult = () => {
     const onSubmit = (data) => {
         data.host_id = teams.find(team => team.team_name === data.host_name).id
         data.guest_id = teams.find(team => team.team_name === data.guest_name).id
-        fetch(URL, {
+        fetch(`${BASE_URL}/results`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

@@ -4,8 +4,7 @@ import './Players.css';
 import { Spinner, Button, ButtonGroup } from 'react-bootstrap';
 
 const Players = () => {
-  const { REACT_APP_URL_PLAYERS } = process.env
-  const URL = REACT_APP_URL_PLAYERS
+  const BASE_URL = process.env.REACT_APP_URL
 
   const [isLoading, setIsLoading] = useState(true);
   const [players, setPlayers] = useState([]);
@@ -18,7 +17,7 @@ const Players = () => {
 
   const getPlayers = async () => {
     try {
-      const response = await fetch(URL)
+      const response = await fetch(`${BASE_URL}/players`)
       return response.json()
         .then(data => {
           setPlayers(data.teamExists)
@@ -32,7 +31,7 @@ const Players = () => {
 
   const deletePlayer = async (id) => {
     try {
-      await fetch(`${URL}/${id}`, { method: "DELETE" })
+      await fetch(`${BASE_URL}/players/${id}`, { method: "DELETE" })
         .then((data) => {
           setPlayers(players.filter(player => player.id !== id))
           setParanoidTeams(paranoidTeams.filter(player => player.id !== id))
@@ -48,9 +47,9 @@ const Players = () => {
   }
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div>
       <h2 className='centered'>Players</h2>
-      <div style={{ textAlign: 'left' }}><Link to="/Players/add" className="link">Add New</Link></div>
+      <Link to="/Players/add" className="link">Add New</Link>
       <table>
         <thead>
           <tr>
@@ -80,7 +79,7 @@ const Players = () => {
           ))}
         </tbody>
       </table>
-      <h2 className='centered' style={{ marginBottom: '50px' }}>Free Transfers</h2>
+      <h2 className='centeredSecond'>Free Transfers</h2>
       <table>
         <thead>
           <tr>
@@ -108,7 +107,7 @@ const Players = () => {
           ))}
         </tbody>
       </table>
-      <div style={{ textAlign: 'left' }}><Link to={'/'} className="link">Back To Home Page</Link></div>
+      <Link to={'/'} className="link">Back To Home Page</Link>
     </div>
   )
 }

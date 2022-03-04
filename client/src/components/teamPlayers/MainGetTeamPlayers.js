@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import { Spinner } from 'react-bootstrap';
 
 const TeamPlayers = () => {
-    const { REACT_APP_URL_TEAM_PLAYERS, REACT_APP_URL_TEAMS } = process.env
-    const URL_TEAMS = REACT_APP_URL_TEAMS
-    const URL = REACT_APP_URL_TEAM_PLAYERS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [isLoading, setIsLoading] = useState(true);
     const [teamPlayers, setTeamPlayers] = useState([]);
@@ -18,7 +16,7 @@ const TeamPlayers = () => {
 
     const getTeamPlayers = async () => {
         try {
-            const response = await fetch(URL)
+            const response = await fetch(`${BASE_URL}/team-players`)
             return response.json()
                 .then(data => {
                     const res = data.filter((value) => {
@@ -34,7 +32,7 @@ const TeamPlayers = () => {
 
     const getTeams = async () => {
         try {
-            const response = await fetch(URL_TEAMS)
+            const response = await fetch(`${BASE_URL}/teams`)
             return response.json()
                 .then(data => {
                     setTeams(data)
@@ -49,8 +47,8 @@ const TeamPlayers = () => {
     }
 
     return (
-        <div style={{ textAlign: 'center' }}>
-            <h2 className='centered' style={{ marginBottom: '50px' }}>All Team Players</h2>
+        <div>
+            <h2 className='centeredSecond'>All Team Players</h2>
             <table>
                 <thead>
                     <tr>
@@ -74,7 +72,7 @@ const TeamPlayers = () => {
                 </tbody>
             </table>
             <div>
-                <h2 className='centered' style={{ marginBottom: '50px' }}>View Team Players</h2>
+                <h2 className='centeredSecond'>View Team Players</h2>
                 <table>
                     <thead>
                         <th>№</th>
@@ -94,7 +92,7 @@ const TeamPlayers = () => {
                     </tbody>
                 </table>
             </div>
-            <div style={{ textAlign: "left" }}>  <Link to={'/'} className='link'>Back to Home Page</Link></div>
+            <div><Link to={'/'} className='link'>Back to Home Page</Link></div>
         </div>
     )
 }

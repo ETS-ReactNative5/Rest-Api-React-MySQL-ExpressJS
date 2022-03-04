@@ -54,6 +54,18 @@
     flex-direction: column;
   }
 
-  .datePicker {
-    width: 100%;
+  table.results th:nth-child(3) {
+    width: 20% 
+  }
+  table.results th:nth-child(4) {
+    width: 8% 
+  }
+  table.results th:nth-child(5) {
+    width: 8% 
+  }
+  table.results th:nth-child(6) {
+    width: 20% 
+  }
+  table.results th:nth-child(8) {
+    width: 15% 
   }

@@ -6,9 +6,7 @@ import * as Yup from 'yup';
 import './Results.css';
 
 const EditResult = () => {
-    const { REACT_APP_URL_RESULTS, REACT_APP_URL_TEAMS } = process.env
-    const URL = REACT_APP_URL_RESULTS
-    const URL_TEAMS = REACT_APP_URL_TEAMS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [hostName, setHostName] = useState([]);
     const [guestName, setGuestName] = useState([]);
@@ -31,7 +29,7 @@ const EditResult = () => {
 
     const getTeams = async () => {
         try {
-            const response = await fetch(URL_TEAMS)
+            const response = await fetch(`${BASE_URL}/teams`)
             return response.json()
                 .then(data => {
                     setTeams(data)
@@ -46,7 +44,7 @@ const EditResult = () => {
 
     const getResultValues = async () => {
         try {
-            const response = await fetch(`${URL}/${id}`,)
+            const response = await fetch(`${BASE_URL}/results/${id}`,)
             return response.json()
                 .then(data => {
                     setHost_id(data.host_id)
@@ -94,7 +92,7 @@ const EditResult = () => {
         data.host_id = teams.find(team => team.team_name === data.host_name).id
         data.guest_id = teams.find(team => team.team_name === data.guest_name).id
 
-        fetch(`${URL}/${id}`, {
+        fetch(`${BASE_URL}/results/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)

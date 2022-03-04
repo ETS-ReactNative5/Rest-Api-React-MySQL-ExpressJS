@@ -4,8 +4,8 @@ import { Spinner, Button, ButtonGroup } from "react-bootstrap";
 
 
 const Results = () => {
-  const { REACT_APP_URL_RESULTS } = process.env
-  const URL = REACT_APP_URL_RESULTS
+  const BASE_URL = process.env.REACT_APP_URL
+
   const [isLoading, setIsLoading] = useState(true);
   const [results, setResults] = useState([]);
 
@@ -16,7 +16,7 @@ const Results = () => {
 
   const getResults = async () => {
     try {
-      const response = await fetch(URL)
+      const response = await fetch(`${BASE_URL}/results`)
       return response.json()
         .then(data => {
           setResults(data)
@@ -30,7 +30,7 @@ const Results = () => {
 
   const deleteResult = async (id) => {
     try {
-      await fetch(`${URL}/${id}`, {
+      await fetch(`${BASE_URL}/results/${id}`, {
         method: "DELETE",
       }).then(response => {
         setResults(results.filter(result => result.id !== id))
@@ -46,20 +46,20 @@ const Results = () => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div>
       <h2 className='centered'>Results</h2>
-      <div style={{ textAlign: "left" }}><Link to="/Results/add" className="link">Add New</Link></div>
-      <table>
+      <div><Link to="/Results/add" className="link">Add New</Link></div>
+      <table className='results'>
         <thead>
           <tr>
             <th>№</th>
             <th>Date</th>
-            <th style={{ width: "20%" }}>Home Team</th>
-            <th style={{ width: "8%" }}>Home Goals</th>
-            <th style={{ width: "8%" }}>Away Goals</th>
-            <th style={{ width: "20%" }}>Away Team</th>
+            <th>Home Team</th>
+            <th>Home Goals</th>
+            <th>Away Goals</th>
+            <th>Away Team</th>
             <th>Venue</th>
-            <th style={{ width: "15%" }}>Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -98,7 +98,7 @@ const Results = () => {
           ))}
         </tbody>
       </table>
-      <div style={{ textAlign: "left" }}><Link to={'/'} className='link'>Back To Home Page</Link></div>
+      <Link to={'/'} className='link'>Back To Home Page</Link>
     </div>
   )
 }

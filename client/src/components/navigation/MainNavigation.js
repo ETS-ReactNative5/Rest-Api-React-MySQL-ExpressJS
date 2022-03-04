@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
 import classes from './MainNavigation.module.css'
-import {Badge, Navbar, Nav,Container} from 'react-bootstrap'
+import { Navbar, Nav,Container} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MainNavigation() {
@@ -8,6 +7,7 @@ function MainNavigation() {
         <div className={classes.header}>
     <Navbar bg="dark" variant="dark">
         <Container>
+            <Navbar.Toggle aria-controls='responsie-navbar-nav' />
         <Navbar.Brand className={classes.logo}>
         Premier League
         </Navbar.Brand>

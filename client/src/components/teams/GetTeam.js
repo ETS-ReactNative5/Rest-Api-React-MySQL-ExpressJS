@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Team = () => {
-    const { REACT_APP_URL_TEAMS } = process.env
-    const URL = REACT_APP_URL_TEAMS
+    const BASE_URL = process.env.REACT_APP_URL
 
     const [team, setTeam] = useState([]);
     const [homeResults, sethomeResults] = useState([]);
@@ -18,7 +17,7 @@ const Team = () => {
 
     const getTeamById = async () => {
         try {
-            const response = await fetch(`${URL}/${id}`,)
+            const response = await fetch(`${BASE_URL}/teams/${id}`,)
             return response.json()
                 .then(data => {
                     const unique = data.awayResults.map(team => team.team_name)
@@ -39,17 +38,17 @@ const Team = () => {
     }
 
     return (
-        <div style={{ textAlign: "center" }}>
-            <h2 className='centered' style={{ marginBottom: '50px' }}>Home Results</h2>
-            <table>
+        <div>
+            <h2 className='centeredSecond'>Home Results</h2>
+            <table className='getTeams'>
                 <thead>
                     <tr>
                         <th>№</th>
                         <th>Date</th>
-                        <th style={{ width: "20%" }}>Home Team</th>
-                        <th style={{ width: "8%" }}>Home Goals</th>
-                        <th style={{ width: "8%" }}>Away Goals</th>
-                        <th style={{ width: "20%" }}>Away Team</th>
+                        <th>Home Team</th>
+                        <th>Home Goals</th>
+                        <th>Away Goals</th>
+                        <th>Away Team</th>
                         <th>Venue</th>
                     </tr>
                 </thead>
@@ -67,16 +66,16 @@ const Team = () => {
                     ))}
                 </tbody>
             </table>
-            <h2 className='centered' style={{ marginBottom: '50px' }} >Away Results</h2>
-            <table>
+            <h2 className='centeredSecond'>Away Results</h2>
+            <table className='getTeams'>
                 <thead>
                     <tr>
                         <th>№</th>
                         <th>Date</th>
-                        <th style={{ width: "20%" }}>Home Team</th>
-                        <th style={{ width: "8%" }}>Home Goals</th>
-                        <th style={{ width: "8%" }}>Away Goals</th>
-                        <th style={{ width: "20%" }}>Away Team</th>
+                        <th>Home Team</th>
+                        <th>Home Goals</th>
+                        <th>Away Goals</th>
+                        <th>Away Team</th>
                         <th>Venue</th>
                     </tr>
                 </thead>
@@ -95,7 +94,7 @@ const Team = () => {
                     ))}
                 </tbody>
             </table>
-            <h2 className='centered' style={{ marginBottom: '50px' }}>Players</h2>
+            <h2 className='centeredSecond'>Players</h2>
             <table>
                 <thead>
                     <tr>
@@ -116,8 +115,8 @@ const Team = () => {
                     ))}
                 </tbody>
             </table>
-            <div style={{ textAlign: "left" }}><Link to={'/teams'} className='link'>Back to Teams</Link></div>
-            <div style={{ textAlign: "left" }}><Link to={'/'} className='link'>Back to Home Page</Link></div>
+            <Link to={'/teams'} className='link'>Back to Teams</Link>
+            <div><Link to={'/'} className='link'>Back to Home Page</Link></div>
         </div>
     )
 }

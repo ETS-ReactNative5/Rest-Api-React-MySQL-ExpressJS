@@ -8,7 +8,8 @@ exports.getResults = async (req, res) => {
             include: [{
                 model: models.teams,
                 as: "host",
-                attributes: ["team_name"]
+                attributes: ["team_name"],
+                paranoid: false
             }]
         })
         const guest = await Results.findAll({
@@ -16,7 +17,8 @@ exports.getResults = async (req, res) => {
             include: [{
                 model: models.teams,
                 as: "guest",
-                attributes: ["team_name"]
+                attributes: ["team_name"],
+                paranoid: false
             }]
         })
 
@@ -25,7 +27,7 @@ exports.getResults = async (req, res) => {
             if (!accu[id]) accu[id] = {};
             accu[id] = { id, ...accu[id], ...rest };
             return accu;
-        }, {}));   
+        }, {}));
         return res.send(output)
     } catch (error) {
         return res.send(error)
