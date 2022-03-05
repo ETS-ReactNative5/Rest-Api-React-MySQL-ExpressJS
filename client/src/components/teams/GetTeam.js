@@ -17,7 +17,7 @@ const Team = () => {
 
     const getTeamById = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/teams/${id}`,)
+            const response = await fetch(`${BASE_URL}/teams/${id}`)
             return response.json()
                 .then(data => {
                     const unique = data.awayResults.map(team => team.team_name)
