@@ -42,22 +42,20 @@ Because the app is running on two servers it's better to open two terminals and 
 npm install 
 ````
 ## Environment configurations
-In server's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration.
+In server's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration. Create a new database which you will use this project
 ```
 #Database
 DB_HOST=your-db-host
 DB_USER=your-db-username
 DB_PASS=your-db-password
 DB_SCHEMA=your-db-schema-name
+
 ```
 In client's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration.
 ```
 #URL for your Backend/server 
-REACT_APP_URL= ex. http://localhost:8000
-REACT_APP_URL_TEAMS= Your server address
-REACT_APP_URL_PLAYERS= Your server address
-REACT_APP_URL_RESULTS= Your server address
-REACT_APP_URL_TEAM_PLAYERS= Your server address
+REACT_APP_BASE_URL= your-server-name-and-port-number
+
 ```
 ## Migrating the tables
 Before you start the server you need to migrate the tables into the database:
