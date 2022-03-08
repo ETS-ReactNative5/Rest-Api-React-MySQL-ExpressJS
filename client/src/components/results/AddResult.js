@@ -1,72 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Form } from 'react-bootstrap'
-import { useNavigate, Link } from 'react-router-dom';
+import { Form, Spinner } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage } from 'formik'
-import * as Yup from 'yup';
+import useFormAddResult from './useFormAddResult';
 import './Results.css';
 
-const AddResult = () => {
-    const BASE_URL = process.env.REACT_APP_URL
+const AddResult = (submitForm) => {
+    const { initialValues, validationSchema, teamHost, teamGuest, error, isLoading, onSubmit } = useFormAddResult(submitForm)
 
-    const [teamHost, setTeamHost] = useState([]);
-    const [teamGuest, setTeamGuest] = useState([]);
-    const [teams, setTeams] = useState([]);
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        getTeams();
-    }, []);
-
-    const getTeams = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/teams`)
-            return response.json()
-                .then(data => {
-                    setTeams(data)
-                    const teams = data.map(team => team.team_name).flat();
-                    setTeamHost(teams)
-                    setTeamGuest(teams)
-                })
-        } catch (error) {
-            console.log(error)
-        }
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
     }
-
-    const initialValues = {
-        host_name: "",
-        guest_name: "",
-        home_goals: "",
-        away_goals: "",
-        date: "",
-        venue: "",
-    };
-
-    const validationSchema = Yup.object().shape({
-        host_name: Yup.string().required("Host field is required!").oneOf(teamHost, 'No such host!'),
-        guest_name: Yup.string().required("Guest field is required!").oneOf(teamGuest, 'No such guest!')
-            .when('host_name', (host_name, schema) => {
-                return schema.test({
-                    test: guest_name => guest_name !== host_name,
-                    message: 'One team cannot play against each other!'
-                })
-            }),
-        home_goals: Yup.number("Goals is a number value!").required("Home Goals are required!").min(0, "Result cannot be negative!"),
-        away_goals: Yup.number("Goals is a number value!").required("Away Goals are required!").min(0, "Result cannot be negative!"),
-        date: Yup.date().required("Date is required!"),
-        venue: Yup.string().required("Venue is required!"),
-    });
-
-    const onSubmit = (data) => {
-        data.host_id = teams.find(team => team.team_name === data.host_name).id
-        data.guest_id = teams.find(team => team.team_name === data.guest_name).id
-        fetch(`${BASE_URL}/results`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        }).then(() => {
-            navigate('/results')
-        })
-    };
+    if (error) {
+        return <div>There was an error: {error}</div>
+    }
 
     return (
         <div className="createResultPage">

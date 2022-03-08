@@ -1,74 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Form } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
+import { Form, Spinner } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage } from "formik";
-import * as Yup from 'yup';
+import useFormAddPlayer from './useFormAddPlayer';
 import './Players.css';
 
-const AddPlayer = () => {
-    const BASE_URL = process.env.REACT_APP_URL
+const AddPlayer = (submitForm) => {
+    const { initialValues, validationSchema, onSubmit, error, isLoading, teamName } = useFormAddPlayer(submitForm)
 
-    const [teamName, setTeamName] = useState([]);
-    const [teams, setTeams] = useState([]);
-    const [players, setPlayers] = useState([]);
-    const navigate = useNavigate();
-    useEffect(() => {
-        getTeams();
-        getPlayers();
-    }, []);
-
-    const getTeams = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/teams`)
-            return response.json()
-                .then(data => {
-                    setTeams(data)
-                    const team_name = data.map(team => team.team_name).flat();
-                    setTeamName(team_name)
-                })
-        } catch (error) {
-            console.log(error)
-        }
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+    if (error) {
+        return <div>There was an error: {error}</div>
     }
 
-    const getPlayers = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/players`)
-            return response.json()
-                .then(data => {
-                    const player = data.players.map(player => player.name).flat();
-                    setPlayers(player)
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const initialValues = {
-        team_name: "",
-        name: "",
-        position: "",
-        age: "",
-    };
-
-    const validationSchema = Yup.object().shape({
-        team_name: Yup.string().required("Team name is required!"),
-        name: Yup.string().required("Name is required!").min(3, "Name should be atleast 3 characters!").max(15, "Name should be maximum 15 characters!")
-            .notOneOf(players, 'Player with this name already exists!'),
-        position: Yup.string().min(2, "Minimum position value is 2 characters!").max(10, "Maxmimum position value is 10 characters!").required("Position field is required!"),
-        age: Yup.number("Age is a number value!").min(15, "Player should be atleast 15 years of age!").max(45, "Player is too old, maximum age is 45!").required("Age is required!"),
-    });
-
-    const onSubmit = async (data) => {
-        data.teamId = teams.find(team => team.team_name === data.team_name).id
-        fetch(`${BASE_URL}/players`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        }).then(() => {
-            navigate('/players')
-        })
-    }
     return (
         <div className="createPlayerPage">
             <Formik

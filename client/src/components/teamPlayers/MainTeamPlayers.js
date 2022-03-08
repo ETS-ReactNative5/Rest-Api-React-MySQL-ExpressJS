@@ -1,49 +1,15 @@
-import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { Spinner } from 'react-bootstrap';
+import useFormMainTeamPlayers from './useFormMainTeamPlayers';
 
 const TeamPlayers = () => {
-    const BASE_URL = process.env.REACT_APP_URL
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [teamPlayers, setTeamPlayers] = useState([]);
-    const [teams, setTeams] = useState([]);
-
-    useEffect(() => {
-        getTeamPlayers();
-        getTeams();
-    }, []);
-
-    const getTeamPlayers = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/team-players`)
-            return response.json()
-                .then(data => {
-                    const res = data.filter((value) => {
-                        return value['players.id'] != null
-                    })
-                    setTeamPlayers(res)
-                    setIsLoading(false)
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const getTeams = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/teams`)
-            return response.json()
-                .then(data => {
-                    setTeams(data)
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const { teams, teamPlayers, error, isLoading } = useFormMainTeamPlayers()
 
     if (isLoading) {
         return (<Spinner animation="border" variant="primary" />)
+    }
+    if (error) {
+        return <div>There was an error: {error}</div>
     }
 
     return (

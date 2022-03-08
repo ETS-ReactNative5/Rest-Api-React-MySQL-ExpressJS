@@ -2,48 +2,16 @@ import { useEffect, useState } from 'react';
 import { Link, } from "react-router-dom";
 import './Players.css';
 import { Spinner, Button, ButtonGroup } from 'react-bootstrap';
+import useFormPlayers from './useFormPlayers';
 
 const Players = () => {
-  const BASE_URL = process.env.REACT_APP_URL
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [players, setPlayers] = useState([]);
-  const [paranoidTeams, setParanoidTeams] = useState([]);
-
-
-  useEffect(() => {
-    getPlayers();
-  }, []);
-
-  const getPlayers = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/players`)
-      return response.json()
-        .then(data => {
-          setPlayers(data.teamExists)
-          setParanoidTeams(data.paranoid)
-          setIsLoading(false)
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const deletePlayer = async (id) => {
-    try {
-      await fetch(`${BASE_URL}/players/${id}`, { method: "DELETE" })
-        .then((data) => {
-          setPlayers(players.filter(player => player.id !== id))
-          setParanoidTeams(paranoidTeams.filter(player => player.id !== id))
-          return data.json();
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { players, paranoidTeams, error, isLoading, deletePlayer } = useFormPlayers()
 
   if (isLoading) {
     return (<Spinner animation="border" variant="primary" />)
+  }
+  if (error) {
+    return <div>There was an error: {error}</div>
   }
 
   return (

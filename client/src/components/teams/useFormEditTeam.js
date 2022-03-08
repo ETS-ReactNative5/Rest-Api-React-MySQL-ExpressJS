@@ -10,10 +10,13 @@ const FormEditTeam = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState(null)
+
     useEffect(() => {
         getTeams();
         getTeamValues();
-    }, []);
+    }, [BASE_URL]);
 
     const getTeams = async () => {
         try {
@@ -22,9 +25,12 @@ const FormEditTeam = () => {
                 .then(data => {
                     const team = data.map(team => team.team_name).flat();
                     setTeam(team)
+                    setError(null)
+                    setIsLoading(false)
                 })
         } catch (error) {
-            console.log(error)
+            setError(error)
+            setIsLoading(false)
         }
     }
     const getTeamValues = async () => {
@@ -34,9 +40,12 @@ const FormEditTeam = () => {
                 .then(data => {
                     const teamName = data.teamPlayers.map(team => team.team_name).flat();
                     setTeamName(teamName[0])
+                    setError(null)
+                    setIsLoading(false)
                 })
         } catch (error) {
-            console.log(error)
+            setError(error)
+            setIsLoading(false)
         }
     }
 
@@ -64,7 +73,8 @@ const FormEditTeam = () => {
             navigate('/teams')
         })
     }
-    return { initialValues, validationSchema, onSubmit }
+
+    return { initialValues, validationSchema, onSubmit, error, isLoading }
 }
 
 export default FormEditTeam

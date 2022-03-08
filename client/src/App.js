@@ -9,11 +9,10 @@ import Results from './components/results/Results';
 import AddResult from './components/results/AddResult';
 import EditResult from './components/results/EditResult';
 import Team from './components/teams/GetTeam';
-import TeamPlayers from './components/teamPlayers/MainGetTeamPlayers';
-import TeamPlayersById from './components/teamPlayers/GetTeamPlayersById';
+import TeamPlayers from './components/teamPlayers/MainTeamPlayers';
+import TeamPlayersById from './components/teamPlayers/TeamPlayersById';
 import HomePage from './components/homePage/homePage';
 import Layout from './components/homePage/layout/Layout'
-import Test from './Test'
 
 function App() {
   return (
@@ -21,7 +20,6 @@ function App() {
       <Layout>
         <Routes>
           <Route path='/' element={< HomePage />} />
-          <Route path='/test' element={< Test />} />
 
           <Route path='/Teams' element={<Teams />} />
           <Route path='/Teams/:id' element={<Team />} />

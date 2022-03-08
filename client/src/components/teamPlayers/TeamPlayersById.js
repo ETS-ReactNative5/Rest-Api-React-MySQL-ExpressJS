@@ -1,26 +1,15 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import useFormTeamPlayersById from './useFormTeamPlayersById';
+import { Spinner } from 'react-bootstrap';
 
 const TeamPlayersById = () => {
-    const BASE_URL = process.env.REACT_APP_URL
+    const { teamPlayersById, error, isLoading } = useFormTeamPlayersById()
 
-    const [teamPlayersById, setTeamPlayersById] = useState([]);
-    const { id } = useParams();
-
-    useEffect(() => {
-        getTeamPlayersById();
-    })
-
-    const getTeamPlayersById = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/team-players/${id}`,)
-            return response.json()
-                .then(data => {
-                    setTeamPlayersById(data)
-                })
-        } catch (error) {
-            console.log(error)
-        }
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+    if (error) {
+        return <div>There was an error: {error}</div>
     }
 
     return (
@@ -44,8 +33,8 @@ const TeamPlayersById = () => {
                             <td>{value['players.age']}</td>
                         </tr>
                     ))}
-                        <Link to={'/Team-Players'} className='link'>Back To Team Players</Link>
-                        <Link to={'/'} className='link'>Home Page</Link>
+                    <Link to={'/Team-Players'} className='link'>Back To Team Players</Link>
+                    <Link to={'/'} className='link'>Home Page</Link>
                 </tbody>
             </table>
         </div>

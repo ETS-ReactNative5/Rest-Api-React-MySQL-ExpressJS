@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 import { Formik, ErrorMessage } from "formik";
 import './Teams.css';
-import { Form } from 'react-bootstrap'
-import FormAddTeam from './FormAddTeam';
+import { Form, Spinner } from 'react-bootstrap'
+import useFormAddTeam from './useFormAddTeam';
 
-const AddTeam = ({ submitForm }) => {
-    const { initialValues, validationSchema, onSubmit } = FormAddTeam(submitForm)
+const AddTeam = (submitForm) => {
+    const { initialValues, validationSchema, error, isLoading, onSubmit } = useFormAddTeam(submitForm)
+
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+    if (error) {
+        return <div>There was an error: {error}</div>
+    }
 
     return (
         <div className="createTeamPage">

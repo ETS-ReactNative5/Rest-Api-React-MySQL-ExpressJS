@@ -1,48 +1,15 @@
-import { useEffect, useState } from 'react';
 import { Link, } from "react-router-dom";
 import { Spinner, Button, ButtonGroup } from "react-bootstrap";
-
+import useFormResults from './useFormResults';
 
 const Results = () => {
-  const BASE_URL = process.env.REACT_APP_URL
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [results, setResults] = useState([]);
-
-  const [color, setColor] = useState({});
-  useEffect(() => {
-    getResults();
-  }, []);
-
-  const getResults = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/results`)
-      return response.json()
-        .then(data => {
-          setResults(data)
-          setIsLoading(false)
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-
-  const deleteResult = async (id) => {
-    try {
-      await fetch(`${BASE_URL}/results/${id}`, {
-        method: "DELETE",
-      }).then(response => {
-        setResults(results.filter(result => result.id !== id))
-        return response.json()
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { results, isLoading, error, deleteResult } = useFormResults()
 
   if (isLoading) {
     return (<Spinner animation="border" variant="primary" />)
+  }
+  if (error) {
+    return <div>There was an error: {error}</div>
   }
 
   return (

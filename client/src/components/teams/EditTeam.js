@@ -1,11 +1,18 @@
 import { Link, } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
-import { Form } from 'react-bootstrap'
-import FormEditTeam from './FormEditTeam';
+import { Form, Spinner } from 'react-bootstrap'
+import useFormEditTeam from './useFormEditTeam';
 import './Teams.css';
 
-const EditTeam = ({ submitForm }) => {
-    const { initialValues, validationSchema, onSubmit } = FormEditTeam(submitForm)
+const EditTeam = (submitForm) => {
+    const { initialValues, validationSchema, error, isLoading, onSubmit } = useFormEditTeam(submitForm)
+
+    if (isLoading) {
+        return (<Spinner animation="border" variant="primary" />)
+    }
+    if (error) {
+        return <div>There was an error: {error}</div>
+    }
 
     return (
         <div className="createTeamPage">

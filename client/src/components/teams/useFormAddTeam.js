@@ -2,24 +2,29 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-const FormAddTeam = () => {
+const useFormAddTeam = () => {
     const BASE_URL = process.env.REACT_APP_URL
 
     const navigate = useNavigate();
     const [teams, setTeam] = useState([]);
-    
-    useEffect(() => {
-        getTeams();
-    }, []);
+    const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
-    const getTeams = async () => {
-        const response = await fetch(`${BASE_URL}/teams`)
-        return response.json()
-            .then(data => {
-                const team = data.map(team => team.team_name).flat();
-                setTeam(team)
-            })
-    }
+    useEffect(async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/teams`)
+            return response.json()
+                .then(data => {
+                    const team = data.map(team => team.team_name).flat();
+                    setTeam(team)
+                    setError(null)
+                    setIsLoading(false)
+                })
+        } catch (error) {
+            setError(error)
+            setIsLoading(false)
+        }
+    }, [BASE_URL]);
 
     const initialValues = {
         team_name: "",
@@ -39,7 +44,8 @@ const FormAddTeam = () => {
             navigate('/teams')
         })
     }
-    return { initialValues, validationSchema, onSubmit }
+
+    return { initialValues, validationSchema, error, isLoading, onSubmit }
 }
 
-export default FormAddTeam
+export default useFormAddTeam
