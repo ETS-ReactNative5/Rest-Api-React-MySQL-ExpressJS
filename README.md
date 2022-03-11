@@ -1,4 +1,3 @@
-
 # REST API using Node.js, Express, MySQL and Sequelize and React.js
 This project is football league, C.R.U.D project which contains:
 teams, players, team-players and results.
@@ -18,17 +17,18 @@ teams, players, team-players and results.
 
 ## Packages Used
 ## SERVER
--** Express** : Flexible and minimal web app for Node.js framework.  
--** MySQL** : It's required as a support for Sequelize package for MySQL databases.  
--** Sequelize** : Promise-base Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.  
--** Sequelize.cli** : Sequelize Command-Line Interface(CLI) ships support for migrations and project bootstrapping.  
--** Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env. 
+**-Express** : Flexible and minimal web app for Node.js framework. 
+**- MySQL** : It's required as a support for Sequelize package for MySQL databases.  
+**-Sequelize** : Promise-base Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.  
+**-Sequelize.cli** : Sequelize Command-Line Interface(CLI) ships support for migrations and project bootstrapping.  
+**-Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env. 
 
 ## CLIENT
--** React** : Front-end library for building user interfaces based on UI components.
--** React-bootstrap ** : Component-based library that provides native Bootstrap components as pure React components
--** Yup ** : Schema builder for value parsing and validation. Define a schema, transform a value to match, validate the shape of an existing value, or both. Yup schema is extremely expressive and allows modelling complex, interdependent validations, or value transformations.
--** React Router ** : It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.
+**-React** : Front-end library for building user interfaces based on UI components.   
+**-React-bootstrap** : Component-based library that provides native Bootstrap components as pure React components.  
+**-Yup**: Schema builder for value parsing and validation. Define a schema, transform a value to match, validate the shape of an existing value, or both. Yup schema is extremely expressive and allows modelling complex, interdependent validations, or value transformations.  
+**-React Router** : It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.  
+**-Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env.   
 
  
 
@@ -38,6 +38,7 @@ teams, players, team-players and results.
 
 ## Instaling packages and dependancies
 Because the app is running on two servers it's better to open two terminals and run the command to install packages and dependancies in server and client via:            
+#
 ````
 npm install 
 ````
@@ -45,6 +46,7 @@ npm install
 
 ## Server
 In server's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration. Create a new database which you will use this project
+#
 ```
 #Database
 DB_HOST=your-db-host
@@ -56,6 +58,7 @@ DB_SCHEMA=your-db-schema-name
 
 ## Client
 In client's folder: create a file with the following name and location .env and copy the contents from .env.example into it. Replace the values with your specific configuration.
+#
 ```
 #URL for your Backend/server 
 REACT_APP_BASE_URL= your-server-name-and-port-number
@@ -63,8 +66,16 @@ REACT_APP_BASE_URL= your-server-name-and-port-number
 ```
 ## Migrating the tables
 Before you start the server you need to migrate the tables into the database. From the server folder type:
+#
 ```
 sequelize db:migrate
+```
+
+## Running the Seeds
+You can use seeders to manage all data migrations in database. In seeders we have test data for teams, players and results. To commit the seeds to database run the command:
+#
+```
+sequelize db:seed:all
 ```
 
 ## Running the App
