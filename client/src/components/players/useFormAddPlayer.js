@@ -59,9 +59,9 @@ const useFormAddPlayer = () => {
 
     const validationSchema = Yup.object().shape({
         team_name: Yup.string().required("Team name is required!"),
-        name: Yup.string().required("Name is required!").min(3, "Name should be atleast 3 characters!").max(15, "Name should be maximum 15 characters!")
+        name: Yup.string().required("Name is required!").min(3, "Name should be atleast 3 characters!").max(20, "Name should be maximum 20 characters!")
             .notOneOf(players, 'Player with this name already exists!'),
-        position: Yup.string().min(2, "Minimum position value is 2 characters!").max(10, "Maxmimum position value is 10 characters!").required("Position field is required!"),
+        position: Yup.string().min(2, "Minimum position value is 2 characters!").max(15, "Maxmimum position value is 15 characters!").required("Position field is required!"),
         age: Yup.number("Age is a number value!").min(15, "Player should be atleast 15 years of age!").max(45, "Player is too old, maximum age is 45!").required("Age is required!"),
     });
 

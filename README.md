@@ -8,12 +8,13 @@ teams, players, team-players and results.
 - /migrations - you can transfer your existing database into another state and vice versa: Those state transitions are saved in migration files, which describe how to get to the new state and how to revert the changes in order to get back to the old state.
 - /controllers - Store all controller files for different modules which contains REST API method;
 - /routes - Store all routes for different modules;
+- /seeders - Contains set of data which if it's seeded it will store it to database;
 - server.js - Base filfe that runs the Nodejs App;
 - env.example - An example environment variable.
 
 - -client/src
 - App.js - Contains Layout which it self contains home page content main navigation and url's to other pages
-- /components - Contains all the app's front end structure - create, read, update delete method for teams, players, results, validations, styling, main navigation which is presented in every page 
+- /components - Contains all the app's front end structure - create, read, update delete method for teams, players, results, validations, styling, main navigation which is presented in every page, home page and images 
 
 ## Packages Used
 ## SERVER
@@ -26,6 +27,10 @@ teams, players, team-players and results.
 ## CLIENT
 **-React** : Front-end library for building user interfaces based on UI components.   
 **-React-bootstrap** : Component-based library that provides native Bootstrap components as pure React components.  
+**-Formik** : Formik is a  lightweight library for ReactJS and React Native and addresses three key pain points of form creation:  
+&nbsp; &nbsp; How the form state is manipulated.  
+&nbsp; &nbsp; How form validation and error messages are handled.  
+&nbsp; &nbsp; How form submission is handled.  
 **-Yup**: Schema builder for value parsing and validation. Define a schema, transform a value to match, validate the shape of an existing value, or both. Yup schema is extremely expressive and allows modelling complex, interdependent validations, or value transformations.  
 **-React Router** : It enables the navigation among views of various components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.  
 **-Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env.   
@@ -61,7 +66,7 @@ In client's folder: create a file with the following name and location .env and 
 #
 ```
 #URL for your Backend/server 
-REACT_APP_BASE_URL= your-server-name-and-port-number
+REACT_APP_URL= your-server-name-and-port-number
 
 ```
 ## Migrating the tables

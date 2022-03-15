@@ -19,13 +19,14 @@ module.exports = {
       position: {
         type: Sequelize.STRING(), allowNull: false,
         validate: {
-          notNull: { msg: "You need to provide position for the player !" }
+          notNull: { msg: "You need to provide position for the player !" },
+          len: [2, 15]
         }
       },
       age: {
         type: Sequelize.INTEGER, allowNull: false,
         validate: {
-          min: 16, max: 45,
+          min: 15, max: 45,
           notNull: { msg: "You need to provide age for the player !" }
 
         }
