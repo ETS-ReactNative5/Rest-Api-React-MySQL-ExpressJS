@@ -18,10 +18,11 @@ teams, players, team-players and results.
 
 ## Packages Used
 ## SERVER
-**-Express** : Flexible and minimal web app for Node.js framework. 
-**- MySQL** : It's required as a support for Sequelize package for MySQL databases.  
+**-Express** : Flexible and minimal web app for Node.js framework.   
+**- MySQL** : It's required as a support for Sequelize package for MySQL databases.    
 **-Sequelize** : Promise-base Node.js ORM for Postgres, MySQL, MariaDB, SQLite and Microsoft SQL Server.  
 **-Sequelize.cli** : Sequelize Command-Line Interface(CLI) ships support for migrations and project bootstrapping.  
+**-Cors** :  Node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.  
 **-Dotenv** : Zero-dependency module that loads environment variables from a .env file into process.env. 
 
 ## CLIENT
